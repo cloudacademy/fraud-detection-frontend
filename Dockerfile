@@ -25,7 +25,7 @@ RUN apk update && \
 
 RUN git clone https://github.com/cloudacademy/fraud-detection-frontend ${SRC_DIR}
 
-RUN cp -R ${SRC_DIR}/app ${APP_DIR}
+RUN cp -R ${SRC_DIR}/app/* ${APP_DIR}
 
 VOLUME ["${APP_DIR}"]
 
