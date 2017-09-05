@@ -27,6 +27,10 @@ def index():
     #return render_template('hello.html', name='jeremy1')
     return render_template('index.html', results=results)
 
+@app.route('/health', methods=['GET'])
+def health():
+    return 'OK'
+
 @app.route('/env1', methods=['GET'])
 def env1():
     return SERVERFUL_DB_HOST
