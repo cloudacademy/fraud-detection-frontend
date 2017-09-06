@@ -11,7 +11,7 @@ SERVERFUL_DB_USER = os.environ['SERVERFUL_DB_USER']
 SERVERFUL_DB_PASS = os.environ['SERVERFUL_DB_PASS']
 SERVERFUL_DB_NAME = os.environ['SERVERFUL_DB_NAME']
 
-SERVERFUL_FRAUDAPI_HOST = os.environ['SERVERFUL_FRAUDAPI_HOST']
+SERVERFUL_FRAUDAPI_PREDICT_URL = os.environ['SERVERFUL_FRAUDAPI_PREDICT_URL']
 
 db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SERVERFUL_DB_NAME, autocommit=True)
 
@@ -37,7 +37,19 @@ def env1():
 
 @app.route('/env2', methods=['GET'])
 def env2():
-    return SERVERFUL_FRAUDAPI_HOST
+    return SERVERFUL_DB_USER
+
+@app.route('/env3', methods=['GET'])
+def env3():
+    return SERVERFUL_DB_PASS
+
+@app.route('/env4', methods=['GET'])
+def env4():
+    return SERVERFUL_DB_NAME
+
+@app.route('/env5', methods=['GET'])
+def env5():
+    return SERVERFUL_FRAUDAPI_PREDICT_URL
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -96,8 +108,7 @@ def fraud3():
         abort(400)
 
     headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    url = 'https://%s/posts' % SERVERFUL_FRAUDAPI_HOST
-    r = requests.post(url, data=json.dumps(request.json), headers=headers)
+    r = requests.post(SERVERFUL_FRAUDAPI_PREDICT_URL, data=json.dumps(request.json), headers=headers)
     data = json.loads(r.text)
 
     PersonID = data["id"]

@@ -2,4 +2,36 @@ docker run -e "SERVERFUL_DB_HOST=34.212.200.244" -e "SERVERFUL_DB_USER=jeremy" -
 
 curl --header 'Content-Type: application/json' -vX POST http://localhost:5000/fraud3 -d @test.data3
 
+
+curl --header 'Content-Type: application/json' -vX POST http://ECSALB-1150630292.us-east-1.elb.amazonaws.com/fraud3 -d @test.data4
+curl -i --header 'Content-Type: application/json' -vX POST http://ECSALB2-772499191.us-east-1.elb.amazonaws.com/fraud3 -d @test.data4
 docker kill $(docker ps -aq) && docker rm $(docker ps -aq)
+
+docker build -t flask-alpine:latest .
+
+https://github.com/Leafney/docker-flask
+
+============================
+
+docker exec -it <container id> /bin/bash
+docker exec -it <container id> /bin/sh
+
+docker inspect <container id>
+
+docker inspect --format='{{.NetworkSettings.IPAddress}}'
+Increase timeout on healthcheck
+
+curl http://172.17.0.3:5000/env1
+curl http://172.17.0.3:5000/env2
+
+
+============================
+
+insert into testtable ( PersonID, LastName, FirstName, City, Date) VALUES (4004, 'Baron', 'Richard', 'Cape Town', '2016-05-23 16:12:04.370460')
+
+============================
+
+https://search-rds-logstash-test-gv6d4f64d227kgwjbrohgys43e.us-west-2.es.amazonaws.com/_plugin/kibana
+
+
+curl -i http://ECSALB2-772499191.us-east-1.elb.amazonaws.com/env2
