@@ -7,7 +7,6 @@ import requests
 import json
 import os
 
-
 SERVERFUL_DB_HOST = os.environ['SERVERFUL_DB_HOST']
 SERVERFUL_DB_USER = os.environ['SERVERFUL_DB_USER']
 SERVERFUL_DB_PASS = os.environ['SERVERFUL_DB_PASS']
@@ -21,8 +20,7 @@ app = Flask(__name__)
 app.debug = True
 
 @app.route('/fraudreport', methods=['GET'])
-def report():
-Content-Type: text/html; charset=utf-8
+def fraudreport():
     cursor = db.cursor()
     sql = "SELECT * FROM fraud_activity"
     cursor.execute(sql)
