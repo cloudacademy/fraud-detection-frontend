@@ -1,10 +1,12 @@
 # encoding:utf-8
 from flask import Flask, abort, request 
 from flask import render_template
+from flask import make_response
 import pymysql
 import requests
 import json
 import os
+
 
 SERVERFUL_DB_HOST = os.environ['SERVERFUL_DB_HOST']
 SERVERFUL_DB_USER = os.environ['SERVERFUL_DB_USER']
@@ -18,14 +20,16 @@ db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SE
 app = Flask(__name__)
 app.debug = True
 
-@app.route('/', methods=['GET'])
-def index():
+@app.route('/fraudreport', methods=['GET'])
+def report():
+Content-Type: text/html; charset=utf-8
     cursor = db.cursor()
-    sql = "SELECT * FROM testtable"
+    sql = "SELECT * FROM fraud_activity"
     cursor.execute(sql)
     results = cursor.fetchall()
-    #return render_template('hello.html', name='jeremy1')
-    return render_template('index.html', results=results)
+    r = make_response(render_template('index.html', results=results))
+    r.headers.set('Content-Type', 'text/html; charset=utf-8')
+    return r
 
 @app.route('/health', methods=['GET'])
 def health():
@@ -51,59 +55,8 @@ def env4():
 def env5():
     return SERVERFUL_FRAUDAPI_PREDICT_URL
 
-@app.route('/insert', methods=['POST'])
-def insert():
-    cursor = db.cursor()
-    sql = "INSERT INTO testtable (PersonID, LastName, FirstName, City, Date) VALUES (100, 'Roger', 'Cook', 'Foxton', '2016-05-23 16:12:03.568810')"
-    cursor.execute(sql)
-    #results = cursor.fetchall()
-    #return render_template('hello.html', name='jeremy1')
-    return 'OK'
-
-@app.route('/insert2', methods=['POST'])
-def insert2():
-    PersonID = 400
-    LastName = 'McHalick'
-    FirstName = 'Olivia'
-    City = 'Greytown'
-    Date = '2016-05-23 16:12:03.568810'
-
-    cursor = db.cursor()
-    sql = "INSERT INTO testtable (PersonID, LastName, FirstName, City, Date) VALUES (%s, %s, %s, %s, %s)"
-    cursor.execute(sql, (PersonID, LastName, FirstName, City, Date))
-
-    return 'OK'
-
-@app.route('/requesttest1', methods=['GET'])
-def requesttest1():
-    r = requests.get('https://jsonplaceholder.typicode.com/posts/1')
-    return r.text
-
-@app.route('/requesttest2', methods=['GET'])
-def requesttest2():
-    data = {"sender": "Alice", "receiver": "Bob", "message": "We did it!"}
-    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    r = requests.post('https://jsonplaceholder.typicode.com/posts', data=json.dumps(data), headers=headers)
-    return r.text
-    
-@app.route('/fraud', methods=['POST'])
-def fraud():
-    if not request.json:
-        abort(400)
-
-    return json.dumps(request.json)
-
-@app.route('/fraud2', methods=['POST'])
-def fraud2():
-    if not request.json:
-        abort(400)
-
-    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    r = requests.post('https://jsonplaceholder.typicode.com/posts', data=json.dumps(request.json), headers=headers)
-    return r.text
-
-@app.route('/fraud3', methods=['POST'])
-def fraud3():
+@app.route('/fraudpredict', methods=['POST'])
+def fraudtest():
     if not request.json:
         abort(400)
 
@@ -121,8 +74,7 @@ def fraud3():
     sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
     cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, Score))
 
-    return 'OK'
-
+    return Score
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
