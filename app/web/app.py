@@ -2,7 +2,7 @@
 from flask import Flask, abort, request 
 from flask import render_template
 from flask import make_response
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 import pymysql
 import requests
 import json
