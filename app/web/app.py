@@ -59,7 +59,7 @@ def env5():
 
 @app.route('/test', methods=['GET'])
 def test():
-    return 'test!'
+    return 'test1.1!'
 
 @app.route('/fraudpredict', methods=['POST'])
 @cross_origin()
