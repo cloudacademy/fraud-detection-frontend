@@ -111,21 +111,13 @@ def fraud3():
     r = requests.post(SERVERFUL_FRAUDAPI_PREDICT_URL, data=json.dumps(request.json), headers=headers)
     data = json.loads(r.text)
 
-    #PersonID = data["id"]
-    #LastName = data["LastName"]
-    #FirstName = data["FirstName"]
-    #City = data["City"]
-    #Date = data["Date"]
-
     LastName = 'Cook'
-    FirstName = 'Jeremy'
+    FirstName = 'Bob'
     CreditCardNumber = '0000111122223333'
-    Amount = 125.50
-    Score = 0.19899620710890045
+    Amount = 1250.50
+    Score = data["scores"][0]
 
     cursor = db.cursor()
-    #sql = "INSERT INTO testtable (PersonID, LastName, FirstName, City, Date) VALUES (%s, %s, %s, %s, %s)"
-    #cursor.execute(sql, (PersonID, LastName, FirstName, City, Date))
     sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
     cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, Score))
 
