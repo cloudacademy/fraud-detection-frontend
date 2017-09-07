@@ -2,6 +2,7 @@
 from flask import Flask, abort, request 
 from flask import render_template
 from flask import make_response
+from flask_cors import CORS
 import pymysql
 import requests
 import json
@@ -18,6 +19,8 @@ db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SE
 
 app = Flask(__name__)
 app.debug = True
+
+CORS(app)
 
 @app.route('/fraudreport', methods=['GET'])
 def fraudreport():
