@@ -80,7 +80,9 @@ def fraudpredict():
     sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
     cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, Score))
 
-    return 'OK'
+    response = flask.jsonify({'result': 'ok'})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
