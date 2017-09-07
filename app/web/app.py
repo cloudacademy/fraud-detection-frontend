@@ -54,7 +54,7 @@ def env5():
     return SERVERFUL_FRAUDAPI_PREDICT_URL
 
 @app.route('/fraudpredict', methods=['POST'])
-def fraudtest():
+def fraudpredict():
     if not request.json:
         abort(400)
 
@@ -72,7 +72,7 @@ def fraudtest():
     sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
     cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, Score))
 
-    return Score
+    return 'OK'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
