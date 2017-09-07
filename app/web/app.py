@@ -1,4 +1,5 @@
 # encoding:utf-8
+import flask
 from flask import Flask, abort, request 
 from flask import render_template
 from flask import make_response
