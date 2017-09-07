@@ -20,7 +20,7 @@ db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SE
 app = Flask(__name__)
 app.debug = True
 
-CORS(app)
+cors = CORS(app, resources={"/*": {"origins": "*"}})
 
 @app.route('/fraudreport', methods=['GET'])
 def fraudreport():
@@ -56,7 +56,12 @@ def env4():
 def env5():
     return SERVERFUL_FRAUDAPI_PREDICT_URL
 
+@app.route('/test', methods=['GET'])
+def test():
+    return 'test!'
+
 @app.route('/fraudpredict', methods=['POST'])
+@cross_origin()
 def fraudpredict():
     if not request.json:
         abort(400)
