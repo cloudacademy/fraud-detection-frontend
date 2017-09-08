@@ -1,6 +1,5 @@
 # encoding:utf-8
-import flask
-from flask import Flask, abort, request 
+from flask import Flask, abort, request, jsonify 
 from flask import render_template
 from flask import make_response
 from flask_cors import CORS, cross_origin
@@ -21,8 +20,13 @@ db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SE
 app = Flask(__name__)
 app.debug = True
 
-cors = CORS(app, resources={"/*": {"origins": "*"}})
+#cors = CORS(app, resources={"/*": {"origins": "*"}})
+cors = CORS(app)
 
+@app.route('/version', methods=['GET'])
+def version():
+    return '1.2'
+    
 @app.route('/fraudreport', methods=['GET'])
 def fraudreport():
     cursor = db.cursor()
@@ -57,12 +61,7 @@ def env4():
 def env5():
     return SERVERFUL_FRAUDAPI_PREDICT_URL
 
-@app.route('/test', methods=['GET'])
-def test():
-    return 'test1.1!'
-
 @app.route('/fraudpredict', methods=['POST'])
-@cross_origin()
 def fraudpredict():
     if not request.json:
         abort(400)
@@ -81,9 +80,8 @@ def fraudpredict():
     sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
     cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, Score))
 
-    response = flask.jsonify({'result': 'ok'})
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+    result = jsonify({"result": 'ok'})
+    return result
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
