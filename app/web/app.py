@@ -34,7 +34,7 @@ def fraudreport():
     cursor.execute(sql)
     results = cursor.fetchall()
     r = make_response(render_template('index.html', results=results))
-    r.headers.set('Content-Type', 'text/html; charset=utf-8')
+    r.headers.set('Content-Type', 'text/html')
     return r
 
 @app.route('/health', methods=['GET'])
