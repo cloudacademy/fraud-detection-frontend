@@ -70,15 +70,16 @@ def fraudpredict():
     r = requests.post(SERVERFUL_FRAUDAPI_PREDICT_URL, data=json.dumps(request.json), headers=headers)
     data = json.loads(r.text)
 
-    LastName = 'Cook'
-    FirstName = 'Bob'
-    CreditCardNumber = '0000111122223333'
-    Amount = 1250.50
-    Score = data["scores"][0]
+    for index, score in enumerate(data["scores"], start=0):
+        LastName = 'Cook'
+        FirstName = 'Bob'
+        CreditCardNumber = '0000111122223333'
+        Amount = request.json["features"][index][29]
+        #Score = data["scores"][0]
 
-    cursor = db.cursor()
-    sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
-    cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, Score))
+        cursor = db.cursor()
+        sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
+        cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, score))
 
     result = jsonify({"result": 'ok'})
     return result
