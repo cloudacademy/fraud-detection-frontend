@@ -13,6 +13,7 @@ RUN apk update && \
 	apk add python py-pip supervisor git && \
 	pip install --upgrade pip && \
 	pip install Flask && \
+	pip install flask-cors && \
 	pip install gunicorn && \
 	pip install requests && \
 	pip install pymysql && \
