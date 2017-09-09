@@ -70,7 +70,8 @@ def fraudpredict():
         FirstName = 'Bob'
         CreditCardNumber = '0000111122223333'
         Amount = request.json["features"][index][29]
-        ScoreRounded = '{:.10f}'.format(round(score, 10))
+        #ScoreRounded = '{:.10f}'.format(round(score, 10))
+        ScoreRounded = round(score, 5)
         ScoreString = repr(score)
 
         try:
@@ -89,7 +90,7 @@ def fraudpredict():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '1.7'
+    return '1.8'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
