@@ -25,7 +25,7 @@ cors = CORS(app)
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '1.2'
+    return '1.3'
     
 @app.route('/fraudreport', methods=['GET'])
 def fraudreport():
@@ -75,11 +75,12 @@ def fraudpredict():
         FirstName = 'Bob'
         CreditCardNumber = '0000111122223333'
         Amount = request.json["features"][index][29]
-        #Score = data["scores"][0]
+        ScoreRounded = '{:.10f}'.format(round(score, 10))
+        ScoreString = repr(score)
 
         cursor = db.cursor()
-        sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score) VALUES (%s, %s, %s, %s, %s)"
-        cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, score))
+        sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
+        cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
 
     result = jsonify({"result": 'ok'})
     return result
