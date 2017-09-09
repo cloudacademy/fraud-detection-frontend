@@ -83,7 +83,7 @@ def fraudpredict():
             sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
         except:
-            app.logger.info('error: %s, %s, %s, %s, %s, %s' % (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
+            app.logger.info('error: %s, %s, %s, %s, %s, %s, %s' % (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString, score))
 
 
     result = jsonify({"result": 'ok'})
