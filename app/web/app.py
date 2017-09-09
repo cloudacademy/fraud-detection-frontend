@@ -25,7 +25,7 @@ cors = CORS(app)
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '1.4'
+    return '1.5'
     
 @app.route('/fraudreport', methods=['GET'])
 def fraudreport():
@@ -83,7 +83,8 @@ def fraudpredict():
             sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
         except:
-            print 'error: %s, %s, %s, %s, %s, %s' % (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString)
+            app.logger.info('error: %s, %s, %s, %s, %s, %s' % (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
+
 
     result = jsonify({"result": 'ok'})
     return result
