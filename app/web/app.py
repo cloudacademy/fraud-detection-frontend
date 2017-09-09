@@ -20,13 +20,8 @@ db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SE
 app = Flask(__name__)
 app.debug = True
 
-#cors = CORS(app, resources={"/*": {"origins": "*"}})
 cors = CORS(app)
 
-@app.route('/version', methods=['GET'])
-def version():
-    return '1.6'
-    
 @app.route('/fraudreport', methods=['GET'])
 def fraudreport():
     cursor = db.cursor()
@@ -82,12 +77,19 @@ def fraudpredict():
             cursor = db.cursor()
             sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
-        except:
+        except Exception as e:
+            app.logger.info('data: %s', % (data))
             app.logger.info('error: %s, %s, %s, %s' % (Amount, ScoreRounded, ScoreString, score))
+            app.logger.info(e.__doc__)
+            app.logger.info(e.message)
 
 
     result = jsonify({"result": 'ok'})
     return result
+
+@app.route('/version', methods=['GET'])
+def version():
+    return '1.7'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
