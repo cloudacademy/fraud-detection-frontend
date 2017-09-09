@@ -78,7 +78,7 @@ def fraudpredict():
             sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
             cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
         except Exception as e:
-            app.logger.info('data: %s', % (data))
+            app.logger.info('data: %s' % (data))
             app.logger.info('error: %s, %s, %s, %s' % (Amount, ScoreRounded, ScoreString, score))
             app.logger.info(e.__doc__)
             app.logger.info(e.message)
