@@ -112,8 +112,7 @@
                 <thead>
                     <tr>
                         <th>Id</th>
-                        <th>Surname</th>
-                        <th>Firstname</th>
+                        <th>Name</th>
                         <th>Credit Card</th>
                         <th>Amount</th>
                         <th>Score</th>
@@ -131,8 +130,7 @@
                     {% for row in results %}
                     <tr>
                         <td>{{ row[0] }}</td>
-                        <td>{{ row[1] }}</td>
-                        <td>{{ row[2] }}</td>
+                        <td>{{ row[2] }} {{ row[1] }}</td>
                         <td>{{ row[3] }}</td>
                         <td>{{ row[4] }}</td>
                         <td>{{ row[5] }}</td>
