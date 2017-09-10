@@ -71,14 +71,15 @@ def fraudpredict():
         CreditCardNumber = '0000111122223333'
         Amount = request.json["features"][index][29]
         #ScoreRounded = '{:.10f}'.format(round(score, 10))
-        #ScoreRounded = 0.75
-        ScoreRounded = "%.10f" % score
+        ScoreRounded = 0.75
+        #ScoreRounded = "%.2f" % score
         ScoreString = repr(score)
 
         try:
             cursor = db.cursor()
-            sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
-            cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, ScoreRounded, ScoreString))
+            #sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
+            sql = "INSERT INTO fraud_activity (score) VALUES (%s)"
+            cursor.execute(sql, (ScoreRounded))
         except Exception as e:
             app.logger.info('data: %s' % (data))
             app.logger.info('error: %s, %s, %s, %s' % (Amount, ScoreRounded, ScoreString, score))
@@ -91,7 +92,7 @@ def fraudpredict():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '2.0'
+    return '2.1'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
