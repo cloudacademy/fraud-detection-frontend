@@ -65,40 +65,20 @@ def fraudpredict():
     r = requests.post(SERVERFUL_FRAUDAPI_PREDICT_URL, data=json.dumps(request.json), headers=headers)
     data = json.loads(r.text)
 
-    app.logger.info('x-r.text: %s' % r.text)
-    app.logger.info('x-data: %s' % data)
-    app.logger.info('x-scores: %s' % data["scores"])
-
     for index, score in enumerate(data["scores"], start=0):
-        try:
             LastName = 'Cook'
             FirstName = 'Bob'
             CreditCardNumber = '0000111122223333'
             Amount = request.json["features"][index][29]
             #ScoreRounded = '{:.10f}'.format(round(score, 10))
             #ScoreRounded = 0.75
-            
-            try:
-                ScoreRounded = "%.10f" % score
-            except:
-                app.logger.info('index1: %s' % (index))
-                ScoreRounded = "%.10f" % 0
-
-            app.logger.info('ScoreRounded: ' % (ScoreRounded))
             #ScoreRounded = "%.2f" % score
-
-            try:
-                ScoreString = repr(score)
-            except:
-                app.logger.info('index2: %s' % (index))
-                ScoreString = "0"
-            
-            
-
+            #ScoreRounded = "%.10f" % score
+            ScoreString = repr(score)
+        try:
             cursor = db.cursor()
-            #sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
-            sql = "INSERT INTO fraud_activity (score) VALUES (%s)"
-            cursor.execute(sql, (ScoreRounded))
+            sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
+            cursor.execute(sql, (LastName, FirstName, CreditCardNumber, Amount, score, ScoreString))
         except Exception as e:
             app.logger.info('data: %s' % (data))
             app.logger.info('error: %s, %s, %s, %s' % (Amount, ScoreRounded, ScoreString, score))
@@ -111,7 +91,7 @@ def fraudpredict():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '2.5'
+    return '2.1'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
