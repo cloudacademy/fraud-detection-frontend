@@ -104,7 +104,7 @@ def fraudpredict():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '2.1'
+    return '2.2'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
