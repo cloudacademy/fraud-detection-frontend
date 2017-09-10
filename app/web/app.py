@@ -65,18 +65,25 @@ def fraudpredict():
     r = requests.post(SERVERFUL_FRAUDAPI_PREDICT_URL, data=json.dumps(request.json), headers=headers)
     data = json.loads(r.text)
 
+    app.logger.info('x-r.text: %s' % r.text)
+    app.logger.info('x-data: %s' % data)
     app.logger.info('x-scores: %s' % data["scores"])
 
     for index, score in enumerate(data["scores"], start=0):
         try:
-            app.logger.info('index, score - %s, %s' % (index, score))
             LastName = 'Cook'
             FirstName = 'Bob'
             CreditCardNumber = '0000111122223333'
             Amount = request.json["features"][index][29]
             #ScoreRounded = '{:.10f}'.format(round(score, 10))
             #ScoreRounded = 0.75
-            ScoreRounded = "%.10f" % score
+            
+            try
+                ScoreRounded = "%.10f" % score
+            except:
+                app.logger.info('index, score - %s, %s' % (index, score))
+                ScoreRounded = "%.10f" % 0
+
             app.logger.info('ScoreRounded: ' % (ScoreRounded))
             #ScoreRounded = "%.2f" % score
             ScoreString = repr(score)
