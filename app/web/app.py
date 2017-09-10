@@ -14,7 +14,7 @@ SERVERFUL_DB_PASS = os.environ['SERVERFUL_DB_PASS']
 SERVERFUL_DB_NAME = os.environ['SERVERFUL_DB_NAME']
 
 SERVERFUL_FRAUDAPI_PREDICT_URL = os.environ['SERVERFUL_FRAUDAPI_PREDICT_URL']
-
+    
 db = pymysql.connect(SERVERFUL_DB_HOST, SERVERFUL_DB_USER, SERVERFUL_DB_PASS, SERVERFUL_DB_NAME, autocommit=True)
 
 app = Flask(__name__)
@@ -22,7 +22,54 @@ app.debug = True
 
 cors = CORS(app)
 
-@app.route('/fraudreport', methods=['GET'])
+CLUSTER_INSTANCE_IP = ''
+DOCKER_CONTAINER_HOSTNAME = os.system("hostname")  # to get the hostname
+DOCKER_CONTAINER_IP = os.system("hostname -i") # to get the host ip 
+
+try:
+    metadata_request = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4/')
+    CLUSTER_INSTANCE_IP = metadata_request.text
+    app.logger.info('CLUSTER_INSTANCE_IP: %s' % (CLUSTER_INSTANCE_IP))
+except:
+    app.logger.info('problem connecting to ec2 metadata')
+
+@app.route('/health', methods=['GET'])
+def health():
+    return 'OK'
+
+@app.route('/env/1', methods=['GET'])
+def env1():
+    return SERVERFUL_DB_HOST
+
+@app.route('/env/2', methods=['GET'])
+def env2():
+    return SERVERFUL_DB_USER
+
+@app.route('/env/3', methods=['GET'])
+def env3():
+    return SERVERFUL_DB_PASS
+
+@app.route('/env/4', methods=['GET'])
+def env4():
+    return SERVERFUL_DB_NAME
+
+@app.route('/env/5', methods=['GET'])
+def env5():
+    return SERVERFUL_FRAUDAPI_PREDICT_URL
+
+@app.route('/docker/container/hostname', methods=['GET'])
+def dockerhost():
+    return DOCKER_CONTAINER_HOSTNAME
+
+@app.route('/docker/container/ip', methods=['GET'])
+def dockerip():
+    return DOCKER_CONTAINER_IP
+
+@app.route('/cluster/instance/ip', methods=['GET'])
+def clusterinstanceip():
+    return CLUSTER_INSTANCE_IP
+
+@app.route('/fraud/report', methods=['GET'])
 def fraudreport():
     cursor = db.cursor()
     sql = "SELECT * FROM fraud_activity"
@@ -32,31 +79,7 @@ def fraudreport():
     r.headers.set('Content-Type', 'text/html')
     return r
 
-@app.route('/health', methods=['GET'])
-def health():
-    return 'OK'
-
-@app.route('/env1', methods=['GET'])
-def env1():
-    return SERVERFUL_DB_HOST
-
-@app.route('/env2', methods=['GET'])
-def env2():
-    return SERVERFUL_DB_USER
-
-@app.route('/env3', methods=['GET'])
-def env3():
-    return SERVERFUL_DB_PASS
-
-@app.route('/env4', methods=['GET'])
-def env4():
-    return SERVERFUL_DB_NAME
-
-@app.route('/env5', methods=['GET'])
-def env5():
-    return SERVERFUL_FRAUDAPI_PREDICT_URL
-
-@app.route('/fraudpredict', methods=['POST'])
+@app.route('/fraud/predict', methods=['POST'])
 def fraudpredict():
     if not request.json:
         abort(400)
