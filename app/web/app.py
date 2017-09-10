@@ -7,6 +7,7 @@ import pymysql
 import requests
 import json
 import os
+import subprocess
 
 SERVERFUL_DB_HOST = os.environ['SERVERFUL_DB_HOST']
 SERVERFUL_DB_USER = os.environ['SERVERFUL_DB_USER']
@@ -23,8 +24,20 @@ app.debug = True
 cors = CORS(app)
 
 CLUSTER_INSTANCE_IP = ''
-DOCKER_CONTAINER_HOSTNAME = os.system("hostname")  # to get the hostname
-DOCKER_CONTAINER_IP = os.system("hostname -i") # to get the host ip 
+DOCKER_CONTAINER_HOSTNAME = ''
+DOCKER_CONTAINER_IP = ''
+
+try:
+    DOCKER_CONTAINER_HOSTNAME = subprocess.check_output("hostname", shell=True)
+    app.logger.info('DOCKER_CONTAINER_HOSTNAME: %s' % (DOCKER_CONTAINER_HOSTNAME))
+except:
+    app.logger.info('problem querying docker container hostname')
+
+try:
+    DOCKER_CONTAINER_IP = subprocess.check_output("hostname -i", shell=True)
+    app.logger.info('DOCKER_CONTAINER_IP: %s' % (DOCKER_CONTAINER_IP))
+except:
+    app.logger.info('problem querying docker container ip address')
 
 try:
     metadata_request = requests.get('http://169.254.169.254/latest/meta-data/local-ipv4/')
