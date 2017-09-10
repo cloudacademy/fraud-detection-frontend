@@ -81,12 +81,19 @@ def fraudpredict():
             try:
                 ScoreRounded = "%.10f" % score
             except:
-                app.logger.info('index: %s' % (index))
+                app.logger.info('index1: %s' % (index))
                 ScoreRounded = "%.10f" % 0
 
             app.logger.info('ScoreRounded: ' % (ScoreRounded))
             #ScoreRounded = "%.2f" % score
-            ScoreString = repr(score)
+
+            try:
+                ScoreString = repr(score)
+            except:
+                app.logger.info('index2: %s' % (index))
+                ScoreString = "0"
+            
+            
 
             cursor = db.cursor()
             #sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -104,7 +111,7 @@ def fraudpredict():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '2.4'
+    return '2.5'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
