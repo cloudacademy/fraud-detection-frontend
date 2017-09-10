@@ -66,11 +66,12 @@ def fraudpredict():
     data = json.loads(r.text)
 
     for index, score in enumerate(data["scores"], start=0):
-            LastName = 'Cook'
-            FirstName = 'Bob'
-            CreditCardNumber = '0000111122223333'
-            Amount = request.json["features"][index][29]
-            ScoreString = repr(score)
+        LastName = 'Cook'
+        FirstName = 'Bob'
+        CreditCardNumber = '0000111122223333'
+        Amount = request.json["features"][index][29]
+        ScoreString = repr(score)
+
         try:
             cursor = db.cursor()
             sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
@@ -80,7 +81,6 @@ def fraudpredict():
             app.logger.info('error: %s, %s, %s' % (Amount, ScoreString, score))
             app.logger.info(e.__doc__)
             app.logger.info(e.message)
-
 
     result = jsonify({"result": 'ok'})
     return result
