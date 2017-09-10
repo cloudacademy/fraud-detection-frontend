@@ -65,19 +65,22 @@ def fraudpredict():
     r = requests.post(SERVERFUL_FRAUDAPI_PREDICT_URL, data=json.dumps(request.json), headers=headers)
     data = json.loads(r.text)
 
-    for index, score in enumerate(data["scores"], start=0):
-        LastName = 'Cook'
-        FirstName = 'Bob'
-        CreditCardNumber = '0000111122223333'
-        Amount = request.json["features"][index][29]
-        #ScoreRounded = '{:.10f}'.format(round(score, 10))
-        #ScoreRounded = 0.75
-        ScoreRounded = "%.10f" % score
-        app.logger.info('ScoreRounded: ' % (ScoreRounded))
-        #ScoreRounded = "%.2f" % score
-        ScoreString = repr(score)
+    app.logger.info('x-scores: %s' % data["scores"])
 
+    for index, score in enumerate(data["scores"], start=0):
         try:
+            app.logger.info('index, score - %s, %s' % (index, score))
+            LastName = 'Cook'
+            FirstName = 'Bob'
+            CreditCardNumber = '0000111122223333'
+            Amount = request.json["features"][index][29]
+            #ScoreRounded = '{:.10f}'.format(round(score, 10))
+            #ScoreRounded = 0.75
+            ScoreRounded = "%.10f" % score
+            app.logger.info('ScoreRounded: ' % (ScoreRounded))
+            #ScoreRounded = "%.2f" % score
+            ScoreString = repr(score)
+
             cursor = db.cursor()
             #sql = "INSERT INTO fraud_activity (lastname, firstname, creditcardnumber, amount, score, scoredetail) VALUES (%s, %s, %s, %s, %s, %s)"
             sql = "INSERT INTO fraud_activity (score) VALUES (%s)"
