@@ -71,7 +71,9 @@ def fraudpredict():
         CreditCardNumber = '0000111122223333'
         Amount = request.json["features"][index][29]
         #ScoreRounded = '{:.10f}'.format(round(score, 10))
-        ScoreRounded = 0.75
+        #ScoreRounded = 0.75
+        ScoreRounded = "%.10f" % score
+        app.logger.info('ScoreRounded: ' % (ScoreRounded))
         #ScoreRounded = "%.2f" % score
         ScoreString = repr(score)
 
