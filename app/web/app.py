@@ -78,7 +78,7 @@ def fraudpredict():
             #ScoreRounded = '{:.10f}'.format(round(score, 10))
             #ScoreRounded = 0.75
             
-            try
+            try:
                 ScoreRounded = "%.10f" % score
             except:
                 app.logger.info('index, score - %s, %s' % (index, score))
