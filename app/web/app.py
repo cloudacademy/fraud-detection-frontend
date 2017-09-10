@@ -81,7 +81,7 @@ def fraudpredict():
             try:
                 ScoreRounded = "%.10f" % score
             except:
-                app.logger.info('index, score - %s, %s' % (index, score))
+                app.logger.info('index: %s' % (index))
                 ScoreRounded = "%.10f" % 0
 
             app.logger.info('ScoreRounded: ' % (ScoreRounded))
@@ -104,7 +104,7 @@ def fraudpredict():
 
 @app.route('/version', methods=['GET'])
 def version():
-    return '2.2'
+    return '2.4'
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
